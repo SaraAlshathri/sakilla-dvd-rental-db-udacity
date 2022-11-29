@@ -1,0 +1,135 @@
+WITH movies_collection AS 
+(
+   SELECT
+      s.title film_title,
+      o.name Category_name,
+      c.rental_id rental_id 
+   FROM
+      film_category so 
+      JOIN
+         category o 
+         ON o.category_id = so.category_id 
+      JOIN
+         film s 
+         ON s.film_id = so.film_id 
+      JOIN
+         inventory d 
+         ON d.film_id = s.film_id 
+      JOIN
+         rental c 
+         ON c.inventory_id = d.inventory_id 
+   WHERE
+      o.name = 'Music' 
+      OR o.name = 'Children' 
+      OR o.name = 'Family' 
+      OR o.name = 'Comedy' 
+      OR o.name = 'Classics' 
+      OR o.name = 'Animation' 
+)
+SELECT DISTINCT
+(film_title),
+   Category_name,
+   COUNT(rental_id) OVER(PARTITION BY film_title) AS counted_rental 
+FROM
+   movies_collection 
+GROUP BY
+   1,
+   2 
+ORDER BY
+   2,
+   1 second query 
+   SELECT
+      s.title,
+      o.name,
+      s.rental_duration,
+      NTILE(4) OVER (
+   ORDER BY
+      s.rental_duration) AS standard_quartile 
+   FROM
+      film_category so 
+      JOIN
+         category o 
+         ON o.category_id = so.category_id 
+      JOIN
+         film s 
+         ON s.film_id = so.film_id 
+   WHERE
+      o.name = 'Music' 
+      OR o.name = 'Comedy' 
+      OR o.name = 'Classics' 
+      OR o.name = 'Children' 
+      OR o.name = 'Family' 
+      OR o.name = 'Animation' 
+   ORDER BY
+      3 Third query WITH movies_collection AS
+      (
+         SELECT
+            s.title,
+            o.name,
+            s.rental_duration,
+            NTILE(4) OVER (
+         ORDER BY
+            s.rental_duration) AS standard_quartile 
+         FROM
+            film_category so 
+            JOIN
+               category o 
+               ON o.category_id = so.category_id 
+            JOIN
+               film s 
+               ON s.film_id = so.film_id 
+         WHERE
+            o.name = 'Music' 
+            OR o.name = 'Children' 
+            OR o.name = 'Family' 
+            OR o.name = 'Comedy' 
+            OR o.name = 'Classics' 
+            OR o.name = 'Animation' 
+      )
+      SELECT
+         name,
+         standard_quartile,
+         CASE
+            WHEN
+               standard_quartile = 1 
+            then
+               COUNT(*) 
+            WHEN
+               standard_quartile = 2 
+            then
+               COUNT(*) 
+            WHEN
+               standard_quartile = 3 
+            then
+               COUNT(*) 
+            WHEN
+               standard_quartile = 4 
+            then
+               COUNT(*) 
+         END
+         AS count 
+      FROM
+         movies_collection 
+      GROUP BY
+         1, 2 
+      ORDER BY
+         1, 2 Fourth query 
+         SELECT
+            DATE_PART('month', o.rental_date) AS Rental_month,
+            DATE_PART('year', o.rental_date) AS Rental_year,
+            f.store_id,
+            COUNT(o.rental_id) Count_rentals 
+         FROM
+            rental o 
+            JOIN
+               staff AS fd 
+               ON o.staff_id = fd.staff_id 
+            JOIN
+               store AS f 
+               ON f.store_id = fd.store_id 
+         GROUP BY
+            1,
+            2,
+            3 
+         ORDER BY
+            4 DESC
